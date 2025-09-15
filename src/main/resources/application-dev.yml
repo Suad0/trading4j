@@ -1,0 +1,50 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:sqlite:./data/dev-trading.db?journal_mode=WAL&synchronous=NORMAL&cache_size=10000&foreign_keys=on
+    hikari:
+      maximum-pool-size: 1
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+# Development logging
+logging:
+  level:
+    com.quanttrading: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Alpaca configuration for development (paper trading)
+alpaca:
+  base-url: https://paper-api.alpaca.markets
+  paper-trading: true
+  api-key: ${ALPACA_API_KEY:PK2FV4QQB5CFN177WXN4}
+  secret-key: ${ALPACA_SECRET_KEY:RMVjdudR03eQV026EXvrZzAAzFJuXUh0oubO6JOW}
+
+# Trading configuration for development
+trading:
+  max-position-size: 1000.00
+  risk-per-trade: 0.02
+  enable-auto-trading: false
+  allowed-symbols:
+    - AAPL
+    - GOOGL
+    - MSFT
+    - TSLA
+    - SPY
+  startup:
+    portfolio-sync-enabled: true
+    portfolio-sync-timeout: 30
+
+# Market data configuration
+market-data:
+  cache-duration: 60 # seconds
+  rate-limit-delay: 1000 # milliseconds

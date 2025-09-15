@@ -1,0 +1,28 @@
+# Example configuration for Alpaca API
+# Copy this to application.yml and add your real API keys
+
+alpaca:
+  # Get these from https://alpaca.markets/
+  api-key: "YOUR_ALPACA_API_KEY_HERE"
+  secret-key: "YOUR_ALPACA_SECRET_KEY_HERE"
+  
+  # Paper trading (sandbox) vs live trading
+  paper-trading: true  # Set to false for live trading
+  
+  # Base URL (automatically set based on paper-trading flag)
+  base-url: "https://paper-api.alpaca.markets"  # Paper trading URL
+  # base-url: "https://api.alpaca.markets"      # Live trading URL
+
+# Database configuration
+spring:
+  datasource:
+    url: jdbc:sqlite:trading_system.db
+    driver-class-name: org.xerial.sqlite.JDBC
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    
+  cache:
+    type: simple  # In-memory caching for market data

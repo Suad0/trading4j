@@ -1,0 +1,148 @@
+spring:
+  application:
+    name: quant-trading-system
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+        format_sql: true
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:${DATABASE_PATH:./data/trading.db}
+    username: ""
+    password: ""
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,httptrace,loggers,env
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+      environment: ${spring.profiles.active}
+  health:
+    defaults:
+      enabled: true
+
+# Logging configuration
+logging:
+  level:
+    com.quanttrading: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{correlationId:-}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{correlationId:-}] [%X{operation:-}] [%X{symbol:-}] %logger{36} - %msg%n"
+  file:
+    name: logs/trading-system.log
+    max-size: 10MB
+    max-history: 30
+    total-size-cap: 1GB
+
+# Application specific configuration
+app:
+  name: Quantitative Trading System
+  version: 1.0.0
+
+# Alpaca API Configuration (use encrypted values in production)
+alpaca:
+  base-url: https://paper-api.alpaca.markets
+  api-key: ${ALPACA_API_KEY:PK2FV4QQB5CFN177WXN4}
+  secret-key: ${ALPACA_SECRET_KEY:RMVjdudR03eQV026EXvrZzAAzFJuXUh0oubO6JOW}
+  paper-trading: true
+
+# Trading Configuration
+trading:
+  max-position-size: 100000.00
+  risk-per-trade: 0.02
+  enable-auto-trading: false
+  default-account-id: default
+  allowed-symbols:
+    - AAPL
+    - GOOGL
+    - MSFT
+    - TSLA
+    - AMZN
+  startup:
+    portfolio-sync-enabled: true
+    portfolio-sync-timeout: 30
+  shutdown:
+    timeout-seconds: 30
+    cancel-pending-orders: true
+    wait-for-fills: true
+
+# Security Configuration
+security:
+  basic-auth:
+    username: ${BASIC_AUTH_USERNAME:admin}
+    password: ${BASIC_AUTH_PASSWORD:password}
+
+# Jasypt Configuration
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD:defaultPassword}
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    key-obtention-iterations: 1000
+    pool-size: 1
+    provider-name: SunJCE
+    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
+    string-output-type: base64
+
+# Machine Learning Configuration
+ml:
+  enabled: true
+  model-storage-path: ${ML_MODEL_PATH:./models/}
+  min-training-data: 100
+  retraining-threshold: 500
+  default-confidence-threshold: 0.65
+  auto-retraining: true
+  max-model-age: 30
+  max-history-size: 200
+  
+  # Feature Engineering Configuration
+  features:
+    lookback-period: 50
+    enable-technical-indicators: true
+    enable-statistical-features: true
+    enable-volume-features: true
+    enable-volatility-features: true
+    enable-momentum-features: true
+    enable-pattern-recognition: true
+  
+  # Performance Configuration
+  performance:
+    min-accuracy-threshold: 0.45
+    performance-window-size: 50
+    enable-performance-tracking: true
+    performance-decay-factor: 0.95
+  
+  # Risk Management Configuration
+  risk:
+    max-position-size-percent: 0.1
+    volatility-adjustment-factor: 1.5
+    confidence-scaling-factor: 1.2
+    stop-loss-multiplier: 2.0
+    take-profit-ratio: 2.0
+    enable-dynamic-sizing: true
+    enable-volatility-adjustment: true

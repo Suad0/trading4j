@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:./data/test-trading.db
+
+# Disable external API health checks for testing
+trading:
+  startup:
+    portfolio-sync-enabled: false
+    portfolio-sync-timeout: 5
+  shutdown:
+    timeout-seconds: 5
+    cancel-pending-orders: true
+    wait-for-fills: false
+
+# Use mock implementations for external APIs
+alpaca:
+  base-url: https://paper-api.alpaca.markets
+  api-key: test-key
+  secret-key: test-secret
+  paper-trading: true
+
+logging:
+  level:
+    com.quanttrading: DEBUG
+    org.springframework.web: WARN

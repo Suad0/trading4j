@@ -1,0 +1,57 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  datasource:
+    url: jdbc:sqlite:${DATABASE_PATH:/app/data/trading.db}
+
+# Production logging
+logging:
+  level:
+    com.quanttrading: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+  file:
+    name: /app/logs/trading-system.log
+
+# Alpaca configuration for production (live trading)
+alpaca:
+  base-url: https://api.alpaca.markets
+  paper-trading: false
+  api-key: ENC(${ALPACA_API_KEY:encrypted-production-api-key-here})
+  secret-key: ENC(${ALPACA_SECRET_KEY:encrypted-production-secret-key-here})
+
+# Trading configuration for production
+trading:
+  max-position-size: ${MAX_POSITION_SIZE:10000.00}
+  risk-per-trade: ${RISK_PER_TRADE:0.01}
+  enable-auto-trading: ${ENABLE_AUTO_TRADING:true}
+  allowed-symbols:
+    - AAPL
+    - GOOGL
+    - MSFT
+    - TSLA
+    - SPY
+    - QQQ
+    - IWM
+    - GLD
+    - TLT
+    - VTI
+
+# Market data configuration
+market-data:
+  cache-duration: 30 # seconds
+  rate-limit-delay: 500 # milliseconds
+
+# Security settings
+server:
+  port: ${SERVER_PORT:8080}
+  ssl:
+    enabled: ${SSL_ENABLED:false}
+
+# Security Configuration
+security:
+  basic-auth:
+    username: ENC(${BASIC_AUTH_USERNAME:encrypted-production-username-here})
+    password: ENC(${BASIC_AUTH_PASSWORD:encrypted-production-password-here})

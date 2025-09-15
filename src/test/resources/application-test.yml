@@ -1,0 +1,41 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+        format_sql: true
+        id:
+          new_generator_mappings: false
+  datasource:
+    url: jdbc:sqlite:file:test.db?cache=shared
+    driver-class-name: org.sqlite.JDBC
+    username: ""
+    password: ""
+  flyway:
+    enabled: false
+
+# Test configuration
+alpaca:
+  base-url: http://localhost:8089
+  paper-trading: true
+  api-key: test-api-key
+  secret-key: test-secret-key
+
+trading:
+  max-position-size: 100.00
+  risk-per-trade: 0.01
+  enable-auto-trading: false
+  allowed-symbols:
+    - AAPL
+    - GOOGL
+
+market-data:
+  cache-duration: 5
+  rate-limit-delay: 100
+
+logging:
+  level:
+    com.quanttrading: WARN
